@@ -1,0 +1,62 @@
+import java.util.Properties
+import org.apache.spark.SparkConf
+import org.apache.spark.streaming.{Seconds, StreamingContext}
+import org.apache.spark.streaming.kafka._
+import java.io._
+import scala.util._
+import org.streum.configrity._
+import dispatch._
+import Defaults._
+import scala.collection.mutable.{ListBuffer, StringBuilder}
+import com.fasterxml.jackson.databind.{DeserializationFeature, ObjectMapper}
+import com.fasterxml.jackson.module.scala.experimental.ScalaObjectMapper
+import com.fasterxml.jackson.module.scala.DefaultScalaModule
+
+                                                                                                              object TSProc {
+  lazy val logger = org.slf4j.LoggerFactory.getLogger(getClass.getName)
+  def processTimeSeries(brokers: String,
+    consumerGroup: String,
+    topics: String): Unit = {
+
+    val conf = new SparkConf().setAppName("Dracarysp data processing")
+    // setting up the Spark Streaming context with a 10s window
+    val ssc = new StreamingContext(conf, Seconds(10))
+    val numThreads = 1
+
+    val topicMap = topics.split(",").map((_, numThreads.toInt)).toMap
+    val kafkaStream = KafkaUtils.createStream(ssc, brokers, consumerGroup, topicMap)
+    logger.info(s"Kafka consumer connected to $brokers and listening to topics: $topics")
+
+    // Aqui eh onde comeca a magica
+    kafkaStream.foreachRDD(rdd => {
+      logger.info("before request")
+      val inputs = rdd.collect()
+      println(inputs)
+      logger.info("building list...")
+      logger.info("serializing data...")
+
+      // Se quiser escrever em um arquivo      
+      /*val oj_out = sb.toString
+      val pw = new PrintWriter(new File("/tmp/offline-crime-data.json" ))
+      pw.write(oj_out)
+      pw.close
+    */
+      logger.info("Uploading crime data...")
+      logger.info(s"In the past 10 seconds I've seen $msgCount messages")
+    })
+
+    // kick off stream processing
+    ssc.start()
+    ssc.awaitTermination()
+  }
+
+  def main(args: Array[String]) {
+    brokers = "localhost:9092"
+    consumerGroup = "SparkConsumer"
+    topics = "test"
+    processTimeSeries(brokers, consumerGroup, topics)
+    System.exit(0)
+  }
+}
+
+
