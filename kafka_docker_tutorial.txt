@@ -127,11 +127,7 @@ e) Kibana e Elastic
 	- Instalar Kibana/elastic docker: docker pull nshou/elasticsearch-kibana
 	- Run: docker run -d -p 9200:9200 -p 5601:5601 nshou/elasticsearch-kibana
 	- Verificar tunel ssh no pc do Dcata Collector, se ele morreu, reiniciar: 
-		Code: ssh -o StrictHostKeyChecking=no -f -o ServerAliveInterval=30 -L 9092:127.0.0.1:9092 mone@0.tcp.ngrok.io -p 16364 -N 
-		Senha: 'mone' ou 'moneperazzoli'
-
+	Code: ssh -o StrictHostKeyChecking=no -f -o ServerAliveInterval=30 -L 9092:127.0.0.1:9092 mone@0.tcp.ngrok.io -p 16364 -N 
 	- Limpar dados: docker stop no 'kafka' e no 'elastic'
 
 
-SENHA AWS:
-AAAaaa111!!!
