@@ -37,11 +37,11 @@ import com.fasterxml.jackson.module.scala.DefaultScalaModule
 
       // Se quiser escrever em um arquivo      
       /*val oj_out = sb.toString
-      val pw = new PrintWriter(new File("/tmp/offline-crime-data.json" ))
+      val pw = new PrintWriter(new File("/tmp/offline-data.json" ))
       pw.write(oj_out)
       pw.close
     */
-      logger.info("Uploading crime data...")
+      logger.info("Uploading data...")
       logger.info(s"In the past 10 seconds I've seen $msgCount messages")
     })
 
